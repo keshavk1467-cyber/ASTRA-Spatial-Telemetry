@@ -32,12 +32,14 @@ Ensure Python 3.10 or higher and a modern web browser are installed on your syst
 git clone [https://github.com/keshavk1467-cyber/ASTRA-Spatial-Telemetry.git](https://github.com/keshavk1467-cyber/ASTRA-Spatial-Telemetry.git)
 cd ASTRA-Spatial-Telemetry
 
-Step 2: Start the FastAPI Backend Server
+### Step 2: Start the FastAPI Backend Server
+```bash
 Navigate to the backend directory, install the required dependencies, and launch the application server:
 
 cd backend
 pip install fastapi "uvicorn[standard]" pydantic
 py -m uvicorn main:app --reload --port 8000
 
-Step 3: Launch the Frontend Dashboard
+### Step 3: Launch the Frontend Dashboard
+```bash 
 Open the frontend/index.html file in any standard web browser (such as Google Chrome, Mozilla Firefox, or Microsoft Edge) by double-clicking the file or hosting it via a local static server.
