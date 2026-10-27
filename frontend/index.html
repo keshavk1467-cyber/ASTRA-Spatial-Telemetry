@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ASTRA | Spatial Telemetry & Environmental Intelligence</title>
+    <!-- Leaflet CSS for OpenStreetMap -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Chart.js for Real-Time Stream Oscilloscope -->
+     <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+    <header>
+        <div class="brand">
+            <div class="brand-logo">A</div>
+            <div class="brand-title">
+                <h1>ASTRA</h1>
+                <p>Advanced Spatial Telemetry & Real-Time Analytics — Concept Simulator</p>
+            </div>
+        </div>
+        <div class="status-pill">
+            <span class="dot"></span>
+            <span id="engine-mode-label">System Online • Spatial Telemetry Stream Active (1 Hz)</span>
+        </div>
+    </header>
+
+    <main>
+        <!-- LEFT SIDEBAR: 4 SYNOPSIS PILLARS + EVS -->
+        <div class="sidebar">
+            <div class="card">
+                <div class="card-header">
+                    <span>Selected Coordinate</span>
+                    <span style="color: var(--accent);">LIVE STREAM</span>
+                </div>
+                <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:8px;">
+                    <span>Latitude: <strong id="ui-lat">28.57405</strong>° N</span>
+                    <span>Longitude: <strong id="ui-lon">77.21541</strong>° E</span>
+                </div>
+                <div class="evs-banner">
+                    <div>
+                        <span style="font-size:10px; color:var(--muted); text-transform:uppercase;">Environmental
+                            Vitality Score (EVS)</span>
+                        <div id="ui-env-status" style="font-size:13px; font-weight:700; margin-top:2px;">Moderate
+                            Vitality</div>
+                    </div>
+                    <div class="evs-score"><span id="ui-evs">56</span><span
+                            style="font-size:13px; color:var(--muted);">/100</span></div>
+                </div>
+            </div>
+
+            <!-- Pillar 1: Air Quality -->
+            <div class="card">
+                <div class="card-header"><span>1. Atmospheric & Air Telemetry</span><span id="ui-aqi">194 US AQI</span>
+                </div>
+                <div class="metric-grid">
+                    <div class="metric-box"><span>PM2.5 (Filtered)</span><strong id="ui-pm25">84.2</strong></div>
+                    <div class="metric-box"><span>PM10</span><strong id="ui-pm10">138.9</strong></div>
+                    <div class="metric-box"><span>NO₂ (µg/m³)</span><strong id="ui-no2">38.4</strong></div>
+                    <div class="metric-box"><span>SO₂ (µg/m³)</span><strong id="ui-so2">15.2</strong></div>
+                    <div class="metric-box"><span>O₃ / CO</span><strong id="ui-co">0.9 ppm</strong></div>
+                    <div class="metric-box"><span>Surface Temp</span><strong id="ui-temp">29.6 °C</strong></div>
+                </div>
+            </div>
+
+            <!-- Pillar 2: Soil & Vegetation -->
+            <div class="card">
+                <div class="card-header"><span>2. Soil & Vegetation Vitality</span><span>Sentinel / SoilGrids</span>
+                </div>
+                <div class="metric-grid">
+                    <div class="metric-box"><span>NDVI Index</span><strong id="ui-ndvi">0.44</strong></div>
+                    <div class="metric-box"><span>Soil Moisture</span><strong id="ui-moisture">37.5 %</strong></div>
+                    <div class="metric-box"><span>Soil Salinity</span><strong id="ui-salinity">1.82 dS/m</strong></div>
+                </div>
+            </div>
+
+            <!-- Pillar 3 & 4: Waste & Spatiotemporal History -->
+            <div class="card">
+                <div class="card-header"><span>3 & 4. Waste & Spatiotemporal History</span><span>Multi-Year</span></div>
+                <div class="metric-grid">
+                    <div class="metric-box"><span>Dump Risk</span><strong id="ui-waste">38.0 / 100</strong></div>
+                    <div class="metric-box"><span>Local Reports</span><strong id="ui-reports">1 Active</strong></div>
+                    <div class="metric-box"><span>5-Yr NDVI Shift</span><strong id="ui-hist">-4.2 %</strong></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT PANE: INTERACTIVE MAP + LIVE NOISE FILTER OSCILLOSCOPE -->
+        <div class="right-pane">
+            <div id="map"></div>
+
+            <div class="console-grid">
+                <!-- Live Dual-Line Chart -->
+                <div class="card" style="display:flex; flex-direction:column; justify-content:space-between;">
+                    <div class="card-header" style="margin-bottom:4px;">
+                        <span>Real-Time EMA Noise Suppression (Raw vs. Filtered PM2.5)</span>
+                        <span style="color:var(--accent);">Up to 80% False-Alarm Reduction</span>
+                    </div>
+                    <div style="flex:1; position:relative;">
+                        <canvas id="telemetryChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Professor Concept Test Console -->
+                <div class="card">
+                    <div class="card-header">
+                        <span>Concept Simulation Controls (Click to Test)</span>
+                        <span>Multivariate AI</span>
+                    </div>
+                    <p style="font-size:11px; color:var(--muted);">
+                        Test how ASTRA differentiates a 1-sensor electrical glitch from a true multi-sensor
+                        environmental anomaly:
+                    </p>
+                    <div class="sim-buttons">
+                        <button id="btn-nom" class="active-nom" onclick="setSimMode('nominal')">1. Normal
+                            Stream</button>
+                        <button id="btn-gli" onclick="setSimMode('glitch')">2. Inject 1s Glitch</button>
+                        <button id="btn-ano" onclick="setSimMode('anomaly')">3. Multi-Sensor Hazard</button>
+                    </div>
+                    <div id="ui-alert-box" class="alert-box"
+                        style="background:rgba(34,197,94,0.08); border-color:rgba(34,197,94,0.3); color:#bbf7d0;">
+                        <strong>STATUS — NOMINAL:</strong> All spatial & environmental telemetry streams within
+                        correlated baseline bounds.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
